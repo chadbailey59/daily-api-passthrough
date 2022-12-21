@@ -1,3 +1,6 @@
+import * as dotenv from "dotenv";
+dotenv.config();
+console.log(process.env);
 import express from "express";
 import apicache from "apicache-plus";
 import fetch from "node-fetch";
@@ -13,7 +16,7 @@ let rooms;
 setInterval(async () => {
   let resp = await fetch("https://api.daily.co/v1/presence", {
     headers: {
-      authorization: "Bearer Token",
+      authorization: `Bearer ${process.env.DAILY_API_TOKEN}`,
     },
   });
   rooms = await resp.json();
@@ -22,6 +25,7 @@ setInterval(async () => {
       Object.keys(rooms).length
     } rooms)`
   );
+  console.log("rooms: ", rooms);
 }, 2000);
 
 app.get("/meetings", async (req, res) => {
