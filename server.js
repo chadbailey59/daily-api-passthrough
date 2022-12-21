@@ -8,6 +8,26 @@ const app = express();
 app.use(compression());
 let cache = apicache.middleware;
 app.use(apicache("5 seconds", () => true));
+let rooms;
+
+setInterval(async () => {
+  let resp = await fetch("https://api.daily.co/v1/presence", {
+    headers: {
+      authorization: "Bearer Token",
+    },
+  });
+  rooms = await resp.json();
+  console.log(
+    `${new Date().toISOString()} Updated rooms data (${
+      Object.keys(rooms).length
+    } rooms)`
+  );
+}, 2000);
+
+app.get("/meetings", async (req, res) => {
+  let roomName = req.query.room;
+  res.send(rooms[roomName]);
+});
 
 app.get("*", async (req, res) => {
   const dailyApiPath = `https://api.daily.co/v1${req.originalUrl}`;
