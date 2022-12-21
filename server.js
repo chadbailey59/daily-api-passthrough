@@ -13,6 +13,7 @@ let cache = apicache.middleware;
 app.use(apicache("5 seconds", () => true));
 let rooms;
 
+// Fetch /presence perodically and create a fake '/meetings' endpoint
 setInterval(async () => {
   let resp = await fetch("https://api.daily.co/v1/presence", {
     headers: {
@@ -33,6 +34,7 @@ app.get("/meetings", async (req, res) => {
   res.send(rooms[roomName]);
 });
 
+// Or make client-side updates to use `/presence` on the client and cache
 app.get("*", async (req, res) => {
   const dailyApiPath = `https://api.daily.co/v1${req.originalUrl}`;
   console.log(
