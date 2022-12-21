@@ -1,9 +1,11 @@
 import express from "express";
 import apicache from "apicache-plus";
 import fetch from "node-fetch";
+import compression from "compression";
 
 const app = express();
 
+app.use(compression());
 let cache = apicache.middleware;
 app.use(apicache("2 seconds", () => true));
 
