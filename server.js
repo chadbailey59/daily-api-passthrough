@@ -7,7 +7,7 @@ const app = express();
 
 app.use(compression());
 let cache = apicache.middleware;
-app.use(apicache("2 seconds", () => true));
+app.use(apicache("5 seconds", () => true));
 
 app.get("*", async (req, res) => {
   const dailyApiPath = `https://api.daily.co/v1${req.originalUrl}`;
